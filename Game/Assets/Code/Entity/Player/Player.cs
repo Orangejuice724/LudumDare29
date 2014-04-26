@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class Player : Entity {
-
+	
+	public Level level;
+	
 	void Start () 
 	{
 		this.x = transform.position.x;
@@ -41,5 +43,10 @@ public class Player : Entity {
 		else if (dir == 3)
 			spriteRenderer.sprite = right;
 		Physics2D.IgnoreLayerCollision(9, 8, true);
+		
+		if(Input.GetKeyDown(KeyCode.Space))
+		{
+			level.nextLevel();
+		}
 	}
 }
