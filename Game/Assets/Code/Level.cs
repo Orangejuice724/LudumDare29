@@ -9,11 +9,13 @@ public class Level : MonoBehaviour {
 	public Transform grassSprite;
 	public Transform woodSprite;
 	public Transform whiteBrickSprite;
+	public Transform elevatorSprite;
 
 	public Color grassColour;
 	public Color woodColour;
 	public Color whiteBrickColour;
 	public Color spawnColour;
+	public Color elevatorColour;
 
 	public Texture2D levelTexture;
 
@@ -54,6 +56,10 @@ public class Level : MonoBehaviour {
 				if(tileColours[x+y*levelTexture.width] == woodColour)
 				{
 					Instantiate(woodSprite, new Vector2(x, y), new Quaternion());
+				}
+				if(tileColours[x+y*levelTexture.width] == elevatorColour)
+				{
+					Instantiate(elevatorSprite, new Vector2(x, y), new Quaternion());
 				}
 				if(tileColours[x+y*levelTexture.width] == spawnColour)
 				{
