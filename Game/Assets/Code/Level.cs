@@ -10,8 +10,21 @@ public class Level : MonoBehaviour {
 	public Transform woodSprite;
 	public Transform whiteBrickSprite;
 
+	public Color grassColour;
+	public Color woodColour;
+	public Color whiteBrickColour;
+	public Color spawnColour;
+
+	public Texture2D levelTexture;
+
+	public Color[] tileColours;
+
+	public Player player;
+	public Obama obama;
+	public SecretService secretService;
+
 	void Start () {
-		for(int y = 0; y < levelHeight; y++)
+		/*for(int y = 0; y < levelHeight; y++)
 		{
 			for(int x = 0; x < levelWidth; x++)
 			{
@@ -21,6 +34,34 @@ public class Level : MonoBehaviour {
 					Instantiate(whiteBrickSprite, new Vector2(x, y), new Quaternion());
 				else
 					Instantiate(woodSprite, new Vector2(x, y), new Quaternion());
+			}
+		}*/
+
+		tileColours = new Color[levelTexture.width*levelTexture.height];
+		tileColours = levelTexture.GetPixels ();
+		for (int y = 0; y < levelTexture.height; y++)
+		{
+			for (int x = 0; x < levelTexture.width; x++)
+			{
+				if(tileColours[x+y*levelTexture.width] == grassColour)
+				{
+					Instantiate(grassSprite, new Vector2(x, y), new Quaternion());
+				}
+				if(tileColours[x+y*levelTexture.width] == whiteBrickColour)
+				{
+					Instantiate(whiteBrickSprite, new Vector2(x, y), new Quaternion());
+				}
+				if(tileColours[x+y*levelTexture.width] == woodColour)
+				{
+					Instantiate(woodSprite, new Vector2(x, y), new Quaternion());
+				}
+				if(tileColours[x+y*levelTexture.width] == spawnColour)
+				{
+					Instantiate(woodSprite, new Vector2(x, y), new Quaternion());
+					player.updatePos(x, y);
+					obama.updatePos(x + 1, y);
+					secretService.updatePos(x + 2, y);
+				}
 			}
 		}
 	}
