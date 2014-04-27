@@ -8,6 +8,8 @@ public abstract class Entity : MonoBehaviour {
 	public float x, y;
 	protected Vector2 localTransform;
 	public int speed;
+	
+	public GUISkin sskin;
 
 	public Sprite front;
 	public Sprite back;
@@ -28,7 +30,7 @@ public abstract class Entity : MonoBehaviour {
 	}
 
 	void Update () {
-
+		
 	}
 
 	public void updatePos(int x, int y)

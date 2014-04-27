@@ -5,6 +5,10 @@ public class Level : MonoBehaviour {
 
 	public int levelWidth;
 	public int levelHeight;
+	
+	public GameObject newCam;
+	
+	public bool doEndingScene;
 
 	public Transform grassSprite;
 	public Transform woodSprite;
@@ -16,6 +20,15 @@ public class Level : MonoBehaviour {
 	public Transform dirtSprite;
 	public Transform redStoneSprite;
 	public Transform stoneSprite;
+	public Transform concreteWallSprite;
+	public Transform concreteTileSprite;
+	public Transform concreteLightRightSprite;
+	public Transform concreteLightLeftSprite;
+	public Transform doorSprite;
+	
+	public Transform SignObj;
+	
+	public GameObject elevator;
 
 	public Color grassColour;
 	public Color woodColour;
@@ -29,6 +42,11 @@ public class Level : MonoBehaviour {
 	public Color dirtColour;
 	public Color redStoneColour;
 	public Color stoneColour;
+	public Color concreteWallColour;
+	public Color concreteTileColour;
+	public Color concreteLightRightColour;
+	public Color concreteLightLeftColour;
+	public Color doorColour;
 	
 	private int level;
 
@@ -37,6 +55,8 @@ public class Level : MonoBehaviour {
 	public Texture2D firstLevel;
 	public Texture2D secondLevel;
 	public Texture2D thirdLevel;
+	public Texture2D fourthLevel;
+	public Texture2D finalLevel;
 
 	public Color[] tileColours;
 	
@@ -56,6 +76,8 @@ public class Level : MonoBehaviour {
 	void Start () {
 		level = 0;
 		renderNextLevel(false);
+		elevator = GameObject.FindGameObjectWithTag("Respawn");
+		newCam.SetActive(false);
 	}
 
 	void Update () {
@@ -84,8 +106,13 @@ public class Level : MonoBehaviour {
 			{
 				GameObject.Destroy(entitiesToDelete[i].gameObject);
 			}
+			GameObject[] signsToDelete = GameObject.FindGameObjectsWithTag("Sign");
+			for(int i = 0; i < signsToDelete.Length; i++)
+			{
+				GameObject.Destroy(signsToDelete[i].gameObject);
+			}
 		}
-		level++;
+		level+=1;
 		if(level == 1)
 		{
 			levelTexture = firstLevel;
@@ -97,6 +124,19 @@ public class Level : MonoBehaviour {
 		if(level == 3)
 		{
 			levelTexture = thirdLevel;
+		}
+		if(level == 4)
+		{
+			levelTexture = fourthLevel;
+			Instantiate(SignObj, new Vector2(29, 5), Quaternion.identity);
+			GameObject go = GameObject.FindGameObjectWithTag("Sign");
+			go.GetComponent<Sign>().message = "You're on your way to the concrete bunker";
+			go.GetComponent<Sign>().cave = true;
+			go.GetComponent<Sign>().player = player;
+		}
+		if(level == 5)
+		{
+			levelTexture = finalLevel;
 		}
 		
 		tileColours = new Color[levelTexture.width*levelTexture.height];
@@ -157,6 +197,28 @@ public class Level : MonoBehaviour {
 					inst(woodSprite, x, y);
 					Instantiate(enemy, new Vector2(x, y), new Quaternion());
 				}
+				
+				//Bunker Code
+				if(tileColours[x+y*levelTexture.width] == concreteWallColour)
+				{
+					inst(concreteWallSprite, x, y);
+				}
+				if(tileColours[x+y*levelTexture.width] == concreteTileColour)
+				{
+					inst(concreteTileSprite, x, y);
+				}
+				if(tileColours[x+y*levelTexture.width] == concreteLightRightColour)
+				{
+					inst(concreteLightRightSprite, x, y);
+				}
+				if(tileColours[x+y*levelTexture.width] == concreteLightLeftColour)
+				{
+					inst(concreteLightLeftSprite, x, y);
+				}
+				if(tileColours[x+y*levelTexture.width] == doorColour)
+				{
+					inst(doorSprite, x, y);
+				}
 			}
 		}
 	}
@@ -168,8 +230,10 @@ public class Level : MonoBehaviour {
 	
 	IEnumerator waitForLevel()
 	{
+		elevator.audio.Play();
 		yield return new WaitForSeconds(5);
 		renderNextLevel(true);
+		elevator.audio.Stop();
 	}
 	
 	public void obamaDeath()
@@ -212,5 +276,15 @@ public class Level : MonoBehaviour {
 		{
 			GameObject.Destroy(entitiesToDelete[i].gameObject);
 		}
+	}
+	
+	public void endScene()
+	{
+		GameObject.Destroy(obama.gameObject);
+		GameObject.Destroy (secretService.gameObject);
+		GameObject.Destroy (player.gameObject);
+		
+		newCam.SetActive(true);
+		newCam.animation.Play("End");
 	}
 }

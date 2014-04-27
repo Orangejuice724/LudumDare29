@@ -16,6 +16,7 @@ public class Player : Entity {
 	{
 		this.x = transform.position.x;
 		this.y = transform.position.y;
+		canShoot = true;
 	}
 
 	void Update () 
@@ -68,8 +69,9 @@ public class Player : Entity {
 			level.nextLevel();
 		}
 		
-		if(Input.GetMouseButtonDown(0))
+		if(Input.GetMouseButton(0) && canShoot)
 		{
+			StartCoroutine(ShotFired());
 			Vector3 pos = Input.mousePosition;
 			pos.z = shootSpot.position.z - Camera.main.transform.position.z;;
 			pos = Camera.main.ScreenToWorldPoint(pos);
@@ -83,5 +85,20 @@ public class Player : Entity {
 		
 		if(dead)
 			level.playerDeath();
+	}
+	
+	void OnGUI()
+	{
+		GUI.skin = sskin;
+		Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+		pos.y = pos.y -= 50;
+		GUI.Label(new Rect(transform.position.x + 160, pos.y, 500, 50), "Health: " + health.ToString());
+	}
+	
+	IEnumerator ShotFired()
+	{
+		canShoot = false;
+		yield return new WaitForSeconds(0.2f);
+		canShoot = true;
 	}
 }

@@ -46,4 +46,13 @@ public class Obama : Entity {
 		if(dead)
 			level.obamaDeath();
 	}
+	
+	void OnGUI()
+	{
+		GUI.skin = sskin;
+		Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+		pos.y = pos.y += 107;
+		pos.y = Screen.height - pos.y;
+		GUI.Label(new Rect(pos.x - 250, pos.y, 500, 50), "Health: " + health.ToString());
+	}
 }

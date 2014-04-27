@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Elevator : MonoBehaviour {
+public class Door : MonoBehaviour {
 	
 	void Start () {
 	}
 	
-	void Update () {
-	
+	void Update () 
+	{
+		
 	}
 	
 	void OnTriggerEnter2D(Collider2D other)
@@ -15,7 +16,7 @@ public class Elevator : MonoBehaviour {
 		Player player = other.GetComponent<Player>();
 		if(player != null)
 		{
-			player.level.nextLevel();
+			player.level.endScene();
 		}
 	}
 }

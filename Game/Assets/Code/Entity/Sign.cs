@@ -10,6 +10,10 @@ public class Sign : MonoBehaviour {
 	
 	private bool showText;
 	
+	public Color col;
+	
+ 	public bool cave;
+	
 	void Start () {
 	
 	}
@@ -30,7 +34,10 @@ public class Sign : MonoBehaviour {
 		{
 			GUI.skin = mainSkin;
 			Vector2 size = GUI.skin.label.CalcSize(new GUIContent(message));
-			GUI.Label(new Rect(Screen.width / 2 - (size.x / 2), 20, size.x, 60), message);
+			if(!cave)
+				GUI.Label(new Rect(Screen.width / 2 - (size.x / 2), 20, size.x, 60), message);
+			else
+				GUI.Label(new Rect(Screen.width / 2 - (size.x / 2), 20, size.x, 60), message, "cave");
 			print ("Doing shit");
 		}
 	}
