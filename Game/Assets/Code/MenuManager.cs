@@ -5,6 +5,7 @@ public class MenuManager : MonoBehaviour {
 
 	public Vector2 mainPos;
 	public Vector2 controlsPos;
+	public Vector2 EndGamePos;
 	
 	public GUISkin sskin;
 	
@@ -68,6 +69,12 @@ public class MenuManager : MonoBehaviour {
 				currentMenu = 0;
 				print ("howdy");
 			}
+			if(currentMenu == 2 && canDraw)
+			{
+				canDraw = false;
+				currentMenu = 0;
+				print ("To infinity and beyond!");
+			}
 		}
 	}
 	
@@ -115,6 +122,17 @@ public class MenuManager : MonoBehaviour {
 			else
 				oldMenu = currentMenu;
 			if(Vector2.Distance(Camera.main.transform.position, controlsPos) < 0.3)
+				oldMenu = currentMenu;
+		}
+		else if(menu_id == 0)
+		{
+			Vector3 pos = new Vector3(EndGamePos.x, EndGamePos.y);
+			pos.z = -10;
+			if(Camera.main.transform.position != pos)
+				Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, pos, 3.0f * Time.deltaTime);
+			else
+				oldMenu = currentMenu;
+			if(Vector2.Distance(Camera.main.transform.position, EndGamePos) < 0.3)
 				oldMenu = currentMenu;
 		}
 	}

@@ -26,6 +26,9 @@ public class Level : MonoBehaviour {
 	public Transform concreteLightLeftSprite;
 	public Transform doorSprite;
 	
+	public AudioClip[] playerDeathSounds;
+	public AudioClip[] presidentDeathSounds;
+	
 	public Transform SignObj;
 	
 	public GameObject elevator;
@@ -78,6 +81,7 @@ public class Level : MonoBehaviour {
 		renderNextLevel(false);
 		elevator = GameObject.FindGameObjectWithTag("Respawn");
 		newCam.SetActive(false);
+		DontDestroyOnLoad(this.gameObject);
 	}
 
 	void Update () {
@@ -258,6 +262,11 @@ public class Level : MonoBehaviour {
 		removeEverything();
 	}
 	
+	public void partnerDeath()
+	{
+		GameObject.Destroy (secretService.gameObject);
+	}
+	
 	IEnumerator waitTillLevelEnd()
 	{
 		yield return new WaitForSeconds(6);
@@ -276,6 +285,11 @@ public class Level : MonoBehaviour {
 		{
 			GameObject.Destroy(entitiesToDelete[i].gameObject);
 		}
+		GameObject[] signsToDelete = GameObject.FindGameObjectsWithTag("Sign");
+		for(int i = 0; i < signsToDelete.Length; i++)
+		{
+			GameObject.Destroy(signsToDelete[i].gameObject);
+		}
 	}
 	
 	public void endScene()
@@ -284,7 +298,16 @@ public class Level : MonoBehaviour {
 		GameObject.Destroy (secretService.gameObject);
 		GameObject.Destroy (player.gameObject);
 		
+		removeEverything();
+		
 		newCam.SetActive(true);
 		newCam.animation.Play("End");
+	}
+	
+	IEnumerator waitForAnim(float time)
+	{
+		yield return new WaitForSeconds(time);
+		Application.LoadLevel(0);
+		GameObject mm = GameObject.FindGameObjectWithTag("Respawn");
 	}
 }

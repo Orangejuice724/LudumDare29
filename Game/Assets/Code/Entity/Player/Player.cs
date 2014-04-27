@@ -91,8 +91,9 @@ public class Player : Entity {
 	{
 		GUI.skin = sskin;
 		Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-		pos.y = pos.y -= 50;
-		GUI.Label(new Rect(transform.position.x + 160, pos.y, 500, 50), "Health: " + health.ToString());
+		pos.y = pos.y += 107;
+		pos.y = Screen.height - pos.y;
+		GUI.Label(new Rect(pos.x - 250, pos.y, 500, 50), "Health: " + health.ToString());
 	}
 	
 	IEnumerator ShotFired()
