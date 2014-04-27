@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Taliban : Entity {
 	
-	public Entity president;
+	public GameObject president;
 	public int distance = 3;
 	public RaycastHit2D hit;
 	
@@ -14,10 +14,13 @@ public class Taliban : Entity {
 	
 	private Transform shoot;
 	
+	public Transform grave;
+	
 	void Start () 
 	{
 		canShoot = true;
 		shoot = shootOne;
+		president = GameObject.FindGameObjectWithTag("president");
 	}
 	
 	void Update () 
@@ -35,6 +38,12 @@ public class Taliban : Entity {
 		{
 			spriteRenderer.sprite = left;
 			shoot = shootTwo;
+		}
+		
+		if(dead)
+		{
+			Instantiate(grave, transform.position, new Quaternion());
+			GameObject.Destroy(gameObject);
 		}
 		
 		/*Debug.DrawLine (shoot.transform.position, president.rigidbody2D.transform.position, Color.blue);
@@ -113,7 +122,11 @@ public class Taliban : Entity {
 	
 	private void shootGun()
 	{
-		GameObject Inst_Bullet = Instantiate(tailbanBullet, shoot.position, new Quaternion()) as GameObject;
+		Quaternion q;
+		q = Quaternion.LookRotation(president.transform.position);
+		q.x = 0;
+		q.y = 0;
+		GameObject Inst_Bullet = Instantiate(tailbanBullet, shoot.position, q) as GameObject;
 		//Inst_Bullet.GetComponent<bullet>().lookAtObj(president.transform);
 		canShoot = false;
 		StartCoroutine(waitForLength(5));

@@ -3,7 +3,14 @@ using System.Collections;
 
 public class Player : Entity {
 	
-	public Level level;
+	public Transform shoot_Bullet;
+	
+	public Transform shootBack;
+	public Transform shootForward;
+	public Transform shootLeft;
+	public Transform shootRight;
+	
+	private Transform shootSpot;
 	
 	void Start () 
 	{
@@ -35,18 +42,46 @@ public class Player : Entity {
 		}
 
 		if (dir == 0)
+		{
+			shootSpot = shootBack;
 			spriteRenderer.sprite = back;
+		}
 		else if (dir == 1)
+		{
+			shootSpot = shootForward;
 			spriteRenderer.sprite = front;
+		}
 		else if (dir == 2)
+		{
+			shootSpot = shootLeft;
 			spriteRenderer.sprite = left;
+		}
 		else if (dir == 3)
+		{
+			shootSpot = shootRight;
 			spriteRenderer.sprite = right;
+		}
 		Physics2D.IgnoreLayerCollision(9, 8, true);
 		
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
 			level.nextLevel();
 		}
+		
+		if(Input.GetMouseButtonDown(0))
+		{
+			Vector3 pos = Input.mousePosition;
+			pos.z = shootSpot.position.z - Camera.main.transform.position.z;;
+			pos = Camera.main.ScreenToWorldPoint(pos);
+			
+			Quaternion q = Quaternion.FromToRotation(Vector3.up, pos - shootSpot.position);
+			//q.x = 0;
+			//q.y = 0;
+			GameObject go = Instantiate(shoot_Bullet, shootSpot.position, q) as GameObject;
+			go.rigidbody2D.AddForce(go.transform.up * 2 * Time.deltaTime);
+		}
+		
+		if(dead)
+			level.playerDeath();
 	}
 }

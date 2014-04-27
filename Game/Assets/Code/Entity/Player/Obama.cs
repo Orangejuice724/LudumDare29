@@ -13,12 +13,12 @@ public class Obama : Entity {
 
 	void Update () 
 	{
-		if (player.rigidbody2D.transform.position.y > (rigidbody2D.transform.position.y + 1))
+		if (player.rigidbody2D.transform.position.y > (rigidbody2D.transform.position.y + 1.25))
 		{
 			rigidbody2D.transform.position += Vector3.up * Time.deltaTime * speed;
 			dir = 0;
 		}
-		if (player.rigidbody2D.transform.position.y < (rigidbody2D.transform.position.y - 1))
+		if (player.rigidbody2D.transform.position.y < (rigidbody2D.transform.position.y - 1.25))
 		{
 			rigidbody2D.rigidbody2D.transform.position += Vector3.down * Time.deltaTime * speed;
 			dir = 1;
@@ -42,5 +42,8 @@ public class Obama : Entity {
 			spriteRenderer.sprite = right;
 		else if (dir == 3)
 			spriteRenderer.sprite = left;
+			
+		if(dead)
+			level.obamaDeath();
 	}
 }

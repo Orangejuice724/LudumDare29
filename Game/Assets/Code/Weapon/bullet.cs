@@ -9,7 +9,7 @@ public class bullet : MonoBehaviour {
 
 	void Start () {
 		president = GameObject.FindGameObjectWithTag("president");
-		lookAtObj();
+		//lookAtObj();
 		StartCoroutine(wait(5));
 	}
 	
@@ -39,8 +39,7 @@ public class bullet : MonoBehaviour {
 	public void lookAtObj()
 	{
 		Quaternion rot;
-		transform.LookAt(president.transform);
-		rot = new Quaternion(0, 0, -transform.rotation.z, transform.rotation.w);
+		rot = new Quaternion(0, 0, 0, transform.rotation.w);
 		transform.rotation = rot;
 		Debug.Log(rot);
 	}

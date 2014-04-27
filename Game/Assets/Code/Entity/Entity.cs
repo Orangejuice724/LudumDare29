@@ -15,6 +15,8 @@ public abstract class Entity : MonoBehaviour {
 	public Sprite right;
 	public SpriteRenderer spriteRenderer;
 	
+	public Level level;
+	
 	protected bool canShoot;
 
 	protected int dir;
