@@ -28,6 +28,7 @@ public class Level : MonoBehaviour {
 	
 	public AudioClip[] playerDeathSounds;
 	public AudioClip[] presidentDeathSounds;
+	public AudioClip[] partnerDeathSounds;
 	
 	public Transform SignObj;
 	
@@ -79,9 +80,8 @@ public class Level : MonoBehaviour {
 	void Start () {
 		level = 0;
 		renderNextLevel(false);
-		elevator = GameObject.FindGameObjectWithTag("Respawn");
+		elevator = GameObject.FindGameObjectWithTag("Finish");
 		newCam.SetActive(false);
-		DontDestroyOnLoad(this.gameObject);
 	}
 
 	void Update () {
@@ -235,6 +235,7 @@ public class Level : MonoBehaviour {
 	IEnumerator waitForLevel()
 	{
 		elevator.audio.Play();
+		Debug.Log(elevator.audio.isPlaying);
 		yield return new WaitForSeconds(5);
 		renderNextLevel(true);
 		elevator.audio.Stop();
@@ -242,9 +243,10 @@ public class Level : MonoBehaviour {
 	
 	public void obamaDeath()
 	{
+		playDeathSound(1);
 		player.transform.position = obamaDeathPos;
-		GameObject.Destroy(obama.gameObject);
-		GameObject.Destroy (secretService.gameObject);
+		if(obama !=null) GameObject.Destroy(obama.gameObject);
+		if(secretService !=null) GameObject.Destroy (secretService.gameObject);
 		player.spriteRenderer.enabled = false;
 		player.GetComponent<Player>().enabled = false;
 		StartCoroutine(waitTillLevelEnd());
@@ -253,9 +255,10 @@ public class Level : MonoBehaviour {
 	
 	public void playerDeath()
 	{
+		playDeathSound(0);
 		player.transform.position = playerDeathPos;
-		GameObject.Destroy(obama.gameObject);
-		GameObject.Destroy (secretService.gameObject);
+		if(obama !=null) GameObject.Destroy(obama.gameObject);
+		if(secretService !=null) GameObject.Destroy (secretService.gameObject);
 		player.spriteRenderer.enabled = false;
 		player.GetComponent<Player>().enabled = false;
 		StartCoroutine(waitTillLevelEnd());
@@ -264,7 +267,33 @@ public class Level : MonoBehaviour {
 	
 	public void partnerDeath()
 	{
-		GameObject.Destroy (secretService.gameObject);
+		playDeathSound(2);
+		if(secretService !=null) GameObject.Destroy (secretService.gameObject);
+	}
+	
+	public void playDeathSound(int pl)
+	{
+		if(pl == 0)
+		{
+			int aud = Random.Range(0, playerDeathSounds.Length + 1);
+			Debug.Log(aud);
+			Camera.main.audio.clip = playerDeathSounds[aud];
+			Camera.main.audio.Play();
+		}
+		else if(pl == 1)
+		{
+			int aud = Random.Range(0, presidentDeathSounds.Length + 1);
+			Debug.Log(aud);
+			Camera.main.audio.clip = presidentDeathSounds[aud];
+			Camera.main.audio.Play();
+		}
+		else
+		{
+			int aud = Random.Range(0, partnerDeathSounds.Length + 1);
+			Debug.Log(aud);
+			Camera.main.audio.clip = partnerDeathSounds[aud];
+			Camera.main.audio.Play();
+		}
 	}
 	
 	IEnumerator waitTillLevelEnd()
@@ -302,12 +331,14 @@ public class Level : MonoBehaviour {
 		
 		newCam.SetActive(true);
 		newCam.animation.Play("End");
+		StartCoroutine(waitForAnim(newCam.animation["End"].length));
 	}
 	
 	IEnumerator waitForAnim(float time)
 	{
 		yield return new WaitForSeconds(time);
+		GameObject go = GameObject.FindGameObjectWithTag("Respawn");
+		go.GetComponent<GlobalManager>().finGame = 2;
 		Application.LoadLevel(0);
-		GameObject mm = GameObject.FindGameObjectWithTag("Respawn");
 	}
 }

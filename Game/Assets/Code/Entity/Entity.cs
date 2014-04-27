@@ -20,6 +20,8 @@ public abstract class Entity : MonoBehaviour {
 	public Level level;
 	
 	protected bool canShoot;
+	
+	public Transform gunSoundPos;
 
 	protected int dir;
 
@@ -48,5 +50,10 @@ public abstract class Entity : MonoBehaviour {
 		{
 			dead = true;
 		}
+	}
+	
+	public void gunshot()
+	{
+		gunSoundPos.audio.Play ();
 	}
 }

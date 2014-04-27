@@ -9,15 +9,21 @@ public class MenuManager : MonoBehaviour {
 	
 	public GUISkin sskin;
 	
-	private int currentMenu;
+	public int currentMenu;
 	private int oldMenu;
 	
 	public bool canDraw;
 	
 	private int selected;
 	
+	GameObject go;
+	
 	void Start () {
-		currentMenu = 0;
+		go = GameObject.FindGameObjectWithTag("Respawn");
+		currentMenu = go.GetComponent<GlobalManager>().finGame;
+		Vector3 npos = new Vector3(EndGamePos.x, EndGamePos.y, -10);
+		if(currentMenu == 2)
+			camera.transform.position = npos;
 		oldMenu = currentMenu;
 		selected = 0;
 	}
@@ -72,6 +78,7 @@ public class MenuManager : MonoBehaviour {
 			if(currentMenu == 2 && canDraw)
 			{
 				canDraw = false;
+				go.GetComponent<GlobalManager>().finGame = 0;
 				currentMenu = 0;
 				print ("To infinity and beyond!");
 			}
@@ -106,33 +113,33 @@ public class MenuManager : MonoBehaviour {
 		{
 			Vector3 pos = new Vector3(mainPos.x, mainPos.y);
 			pos.z = -10;
-			if(Camera.main.transform.position != pos)
-				Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, pos, 3.0f * Time.deltaTime);
+			if(camera.transform.position != pos)
+				camera.transform.position = Vector3.Lerp(camera.transform.position, pos, 3.0f * Time.deltaTime);
 			else
 				oldMenu = currentMenu;
-			if(Vector2.Distance(Camera.main.transform.position, mainPos) < 0.3)
+			if(Vector2.Distance(camera.transform.position, mainPos) < 0.3)
 				oldMenu = currentMenu;
 		}
 		else if(menu_id == 1)
 		{
 			Vector3 pos = new Vector3(controlsPos.x, controlsPos.y);
 			pos.z = -10;
-			if(Camera.main.transform.position != pos)
-				Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, pos, 3.0f * Time.deltaTime);
+			if(camera.transform.position != pos)
+				camera.transform.position = Vector3.Lerp(camera.transform.position, pos, 3.0f * Time.deltaTime);
 			else
 				oldMenu = currentMenu;
-			if(Vector2.Distance(Camera.main.transform.position, controlsPos) < 0.3)
+			if(Vector2.Distance(camera.transform.position, controlsPos) < 0.3)
 				oldMenu = currentMenu;
 		}
 		else if(menu_id == 0)
 		{
 			Vector3 pos = new Vector3(EndGamePos.x, EndGamePos.y);
 			pos.z = -10;
-			if(Camera.main.transform.position != pos)
-				Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, pos, 3.0f * Time.deltaTime);
+			if(camera.transform.position != pos)
+				camera.transform.position = Vector3.Lerp(camera.transform.position, pos, 3.0f * Time.deltaTime);
 			else
 				oldMenu = currentMenu;
-			if(Vector2.Distance(Camera.main.transform.position, EndGamePos) < 0.3)
+			if(Vector2.Distance(camera.transform.position, EndGamePos) < 0.3)
 				oldMenu = currentMenu;
 		}
 	}

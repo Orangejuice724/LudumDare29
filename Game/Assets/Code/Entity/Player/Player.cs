@@ -25,21 +25,35 @@ public class Player : Entity {
 		{
 			rigidbody2D.transform.position += Vector3.up * Time.deltaTime * speed;
 			dir = 0;
+			if(!audio.isPlaying)
+				audio.Play();
 		}
 		if (Input.GetKey (KeyCode.S) || Input.GetKey (KeyCode.DownArrow)) 
 		{
 			rigidbody2D.transform.position += Vector3.down * Time.deltaTime * speed;
 			dir = 1;
+			if(!audio.isPlaying)
+				audio.Play();
 		}
 		if (Input.GetKey (KeyCode.A) || Input.GetKey (KeyCode.LeftArrow)) 
 		{
 			rigidbody2D.transform.position += Vector3.left * Time.deltaTime * speed;
 			dir = 2;
+			if(!audio.isPlaying)
+				audio.Play();
 		}
 		if (Input.GetKey (KeyCode.D) || Input.GetKey (KeyCode.RightArrow)) 
 		{
 			rigidbody2D.transform.position += Vector3.right * Time.deltaTime * speed;
 			dir = 3;
+			if(!audio.isPlaying)
+				audio.Play();
+		}
+		
+		if(!Input.GetKey (KeyCode.W) && !Input.GetKey (KeyCode.UpArrow ) && !Input.GetKey (KeyCode.S) && !Input.GetKey (KeyCode.DownArrow) && !Input.GetKey (KeyCode.A) && !Input.GetKey (KeyCode.LeftArrow) && !Input.GetKey (KeyCode.D) && !Input.GetKey (KeyCode.RightArrow))
+		{
+			if(audio.isPlaying)
+				audio.Stop();
 		}
 
 		if (dir == 0)
@@ -80,7 +94,7 @@ public class Player : Entity {
 			//q.x = 0;
 			//q.y = 0;
 			GameObject go = Instantiate(shoot_Bullet, shootSpot.position, q) as GameObject;
-			go.rigidbody2D.AddForce(go.transform.up * 2 * Time.deltaTime);
+			//go.rigidbody2D.AddForce(go.transform.up * 2 * Time.deltaTime);
 		}
 		
 		if(dead)
@@ -98,6 +112,7 @@ public class Player : Entity {
 	
 	IEnumerator ShotFired()
 	{
+		gunshot();
 		canShoot = false;
 		yield return new WaitForSeconds(0.2f);
 		canShoot = true;
